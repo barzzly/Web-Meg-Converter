@@ -10,3 +10,6 @@ Final_GeyserMC_Input.zip
 .dist
 node_modules/.cache
 dist/
+
+.claude
+CLAUDE.MD
