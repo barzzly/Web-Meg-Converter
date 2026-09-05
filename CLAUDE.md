@@ -15,7 +15,7 @@ node convert.js
 
 `npm run dev` starts the Vite React UI. `npm run build` creates the production frontend bundle; `npm run lint` currently runs the same build-level validation because no separate linter is configured. `node convert.js` expects `input.zip` in repository root and produces `meg-bedrock.zip`. It launches Chromium through Puppeteer, so local runs need a working Chromium download and system dependencies supported by Puppeteer.
 
-Vercel deploys the React static bundle and `api/` serverless functions. Copy `.env.example` values into server-only Vercel environment variables: `BLOB_READ_WRITE_TOKEN`, `BLOB_HOSTNAME`, `GITHUB_TOKEN`, `GITHUB_REPOSITORY`, `GITHUB_WORKFLOW`, and `GITHUB_BRANCH`. Browser uploads go to temporary Vercel Blob storage, then `/api/convert` dispatches GitHub Actions with the Blob URL. `/api/status` polls the run and `/api/download` proxies the short-lived output artifact. `vercel.json` gives API routes a 60-second ceiling. Keep deployment private until authentication and rate limiting are added.
+Vercel deploys the React static bundle and `api/` serverless functions. Copy `.env.example` values into server-only Vercel environment variables: `BLOBMEG_READ_WRITE_TOKEN`, `BLOBMEG_HOSTNAME`, `GITHUB_TOKEN`, `GITHUB_REPOSITORY`, `GITHUB_WORKFLOW`, and `GITHUB_BRANCH`. Browser uploads go to temporary Vercel Blob storage, then `/api/convert` dispatches GitHub Actions with the Blob URL. `/api/status` polls the run and `/api/download` proxies the short-lived output artifact. `vercel.json` gives API routes a 60-second ceiling. Keep deployment private until authentication and rate limiting are added.
 
 No automated tests exist; `npm test` is a non-failing placeholder.
 

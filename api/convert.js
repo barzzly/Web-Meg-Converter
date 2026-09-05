@@ -4,7 +4,7 @@ const { githubConfig, githubRequest, json } = require('./_github');
 function isAllowedBlobUrl(value) {
   try {
     const url = new URL(value);
-    const configuredHost = process.env.BLOB_HOSTNAME;
+    const configuredHost = process.env.BLOBMEG_HOSTNAME;
     return url.protocol === 'https:' && Boolean(configuredHost) && url.hostname === configuredHost;
   } catch {
     return false;

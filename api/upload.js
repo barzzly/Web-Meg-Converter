@@ -17,13 +17,13 @@ module.exports = async function upload(req, res) {
     const clientPayload = getPayload(rawBody);
     const filename = typeof clientPayload.filename === 'string' ? clientPayload.filename : '';
     const size = Number(clientPayload.size);
-    if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error('Blob storage is not configured.');
+    if (!process.env.BLOBMEG_READ_WRITE_TOKEN) throw new Error('Blob storage is not configured.');
 
     if (!filename || !filename.toLowerCase().endsWith('.zip')) return res.status(400).json({ error: 'Only .zip files are accepted.' });
     if (!Number.isSafeInteger(size) || size <= 0 || size > MAX_FILE_SIZE) return res.status(400).json({ error: 'File must be between 1 byte and 250 MB.' });
 
     const result = await handleUpload({
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+      token: process.env.BLOBMEG_READ_WRITE_TOKEN,
       request: req,
       body: rawBody,
       onBeforeGenerateToken: async (pathname, payload, multipart) => {
