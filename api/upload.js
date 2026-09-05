@@ -26,6 +26,7 @@ module.exports = async function upload(req, res) {
       token: process.env.BLOB_READ_WRITE_TOKEN,
       request: req,
       body: rawBody,
+      access: 'public',
       onBeforeGenerateToken: async (pathname, payload, multipart) => {
         const safeName = pathname.split('/').pop() || '';
         const parsedPayload = getPayload({ clientPayload: payload });
@@ -36,7 +37,6 @@ module.exports = async function upload(req, res) {
         if (!Number.isSafeInteger(payloadSize) || payloadSize <= 0 || payloadSize > MAX_FILE_SIZE) throw new Error('File must be between 1 byte and 250 MB.');
         if (!safeName.toLowerCase().endsWith('.zip')) throw new Error('Only .zip files are accepted.');
         return {
-          access: 'public',
           allowedContentTypes: ['application/zip'],
           maximumSizeInBytes: MAX_FILE_SIZE,
           validUntil: Date.now() + 15 * 60 * 1000,
