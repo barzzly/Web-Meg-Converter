@@ -31,7 +31,9 @@ module.exports = async function convert(req, res) {
     if (!response.ok) {
       const detail = await response.text();
       console.error('GitHub dispatch failed:', response.status, detail.slice(0, 300));
-      return json(res, 502, { error: 'GitHub could not start conversion.' });
+      let reason = '';
+      try { reason = JSON.parse(detail).message || ''; } catch {}
+      return json(res, 502, { error: `GitHub could not start conversion (${response.status}${reason ? `: ${reason}` : ''}).` });
     }
 
     return json(res, 202, { request_id: requestId, status: 'queued' });
