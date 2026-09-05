@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { upload } from '@vercel/blob/client';
 import {
   AlertCircle,
-  Archive,
   ArrowRight,
   Check,
   CheckCircle2,
   ChevronRight,
   Circle,
   Download,
-  FileArchive,
   FileBox,
   GitBranch,
   LoaderCircle,
@@ -18,11 +15,9 @@ import {
   ShieldCheck,
   Sparkles,
   Sun,
-  UploadCloud,
-  X,
+  Link,
 } from 'lucide-react';
 
-const MAX_FILE_SIZE = 250 * 1024 * 1024;
 const POLL_INTERVAL = 5000;
 const POLL_TIMEOUT = 25 * 60 * 1000;
 
@@ -37,13 +32,6 @@ const STEPS = [
   { id: 'download', label: 'Download result' },
 ];
 
-function formatBytes(bytes) {
-  if (!bytes) return '0 B';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-  return `${(bytes / (1024 ** index)).toFixed(index ? 1 : 0)} ${units[index]}`;
-}
-
 function getErrorMessage(error) {
   return error instanceof Error ? error.message : 'Something went wrong. Try again.';
 }
@@ -56,15 +44,13 @@ function StepIcon({ state }) {
 
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('barzzly-theme') || 'dark');
-  const [file, setFile] = useState(null);
-  const [dragging, setDragging] = useState(false);
+  const [sourceUrl, setSourceUrl] = useState('');
   const [phase, setPhase] = useState('idle');
   const [statusText, setStatusText] = useState('Ready when you are.');
   const [error, setError] = useState('');
   const [runId, setRunId] = useState('');
   const [downloadUrl, setDownloadUrl] = useState('');
   const [startedAt, setStartedAt] = useState(0);
-  const inputRef = useRef(null);
   const pollTimer = useRef(null);
 
   useEffect(() => {
@@ -77,31 +63,9 @@ function App() {
 
   const currentStep = phase === 'idle' ? 0 : phase === 'selecting' ? 1 : phase === 'uploading' ? 1 : phase === 'queued' ? 2 : phase === 'converting' ? 3 : phase === 'success' ? 4 : 1;
 
-  const validateFile = (candidate) => {
-    if (!candidate) return false;
-    if (!candidate.name.toLowerCase().endsWith('.zip')) {
-      setError('Choose a ZIP package containing your .bbmodel files.');
-      return false;
-    }
-    if (candidate.size > MAX_FILE_SIZE) {
-      setError(`File is too large. Maximum size is ${formatBytes(MAX_FILE_SIZE)}.`);
-      return false;
-    }
-    setError('');
-    setFile(candidate);
-    setPhase('selecting');
-    setStatusText('Package ready to convert.');
-    return true;
-  };
-
-  const handleFileInput = (event) => {
-    validateFile(event.target.files?.[0]);
-    event.target.value = '';
-  };
-
   const reset = () => {
     window.clearTimeout(pollTimer.current);
-    setFile(null);
+    setSourceUrl('');
     setPhase('idle');
     setStatusText('Ready when you are.');
     setError('');
@@ -144,25 +108,15 @@ function App() {
   };
 
   const startConversion = async () => {
-    if (!file || ['uploading', 'queued', 'converting'].includes(phase)) return;
+    if (!sourceUrl.trim() || ['uploading', 'queued', 'converting'].includes(phase)) return;
     setError('');
     setDownloadUrl('');
     const started = Date.now();
     setStartedAt(started);
     try {
-      setPhase('uploading');
-      setStatusText('Uploading package securely…');
-      const blob = await upload(file.name, file, {
-        access: 'public',
-        clientPayload: JSON.stringify({ filename: file.name, size: file.size }),
-        handleUploadUrl: '/api/upload',
-        multipart: false,
-        contentType: 'application/zip',
-      });
-
       setPhase('queued');
       setStatusText('Starting GitHub Actions conversion…');
-      const dispatchResponse = await fetch('/api/convert', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: blob.url, filename: file.name }) });
+      const dispatchResponse = await fetch('/api/convert', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ url: sourceUrl.trim() }) });
       const dispatchData = await dispatchResponse.json().catch(() => ({}));
       if (!dispatchResponse.ok) throw new Error(dispatchData.error || 'Could not start conversion.');
       if (!isUuid(dispatchData.request_id)) throw new Error('Invalid conversion request returned by server.');
@@ -174,8 +128,6 @@ function App() {
   };
 
   const isBusy = ['uploading', 'queued', 'converting'].includes(phase);
-  const dropLabel = file ? 'Replace package' : 'Drop ZIP package here';
-
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -213,14 +165,13 @@ function App() {
           </aside>
 
           <div className="convert-panel">
-            <div className="panel-heading"><div><div className="panel-kicker">INPUT PACKAGE</div><h2>Upload models</h2></div><FileArchive size={23} className="heading-icon" /></div>
-            <input ref={inputRef} type="file" accept=".zip,application/zip" onChange={handleFileInput} hidden />
-            {!file ? <button type="button" className={`drop-zone ${dragging ? 'dragging' : ''}`} onClick={() => inputRef.current?.click()} onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); validateFile(event.dataTransfer.files?.[0]); }}><span className="upload-icon"><UploadCloud size={27} /></span><strong>{dropLabel}</strong><span>or click to browse from your device</span><small>ZIP only · max {formatBytes(MAX_FILE_SIZE)}</small></button> : <div className="file-card"><div className="file-icon"><Archive size={21} /></div><div className="file-info"><strong title={file.name}>{file.name}</strong><span>{formatBytes(file.size)} · ZIP package</span></div>{!isBusy && phase !== 'success' && <button type="button" className="remove-button" onClick={reset} aria-label="Remove selected package"><X size={16} /></button>} {phase === 'success' && <CheckCircle2 className="success-icon" size={20} />}</div>}
+             <div className="panel-heading"><div><div className="panel-kicker">INPUT PACKAGE</div><h2>Paste ZIP link</h2></div><Link size={23} className="heading-icon" /></div>
+             <div className="url-input-card"><label htmlFor="source-url">Public ZIP download URL</label><input id="source-url" type="url" placeholder="https://www.dropbox.com/...zip?dl=1" value={sourceUrl} onChange={(event) => { setSourceUrl(event.target.value); setError(''); setPhase(event.target.value ? 'selecting' : 'idle'); }} disabled={isBusy} /><span>Use a direct-download link. The ZIP must contain your .bbmodel files.</span></div>
 
             <div className={`status-card ${phase === 'error' ? 'error' : phase === 'success' ? 'success' : ''}`} aria-live="polite"><div className="status-card-icon">{phase === 'error' ? <AlertCircle size={17} /> : phase === 'success' ? <CheckCircle2 size={17} /> : isBusy ? <LoaderCircle size={17} className="spin" /> : <FileBox size={17} />}</div><div><strong>{statusText}</strong>{runId && <span className="run-id">Run #{runId}</span>}</div></div>
             {error && <div className="error-message" role="alert"><AlertCircle size={15} /> <span>{error}</span></div>}
 
-            <div className="action-row">{phase === 'success' && downloadUrl ? <a className="primary-button" href={downloadUrl} download="meg-bedrock.zip"><Download size={17} /> Download Bedrock ZIP</a> : <button type="button" className="primary-button" onClick={startConversion} disabled={!file || isBusy}>{isBusy ? <LoaderCircle size={17} className="spin" /> : <ArrowRight size={17} />}{isBusy ? 'Converting…' : 'Start conversion'}</button>}{(phase === 'error' || phase === 'success') && <button type="button" className="secondary-button" onClick={reset}><RefreshCw size={15} /> Start over</button>}</div>
+             <div className="action-row">{phase === 'success' && downloadUrl ? <a className="primary-button" href={downloadUrl} download="meg-bedrock.zip"><Download size={17} /> Download Bedrock ZIP</a> : <button type="button" className="primary-button" onClick={startConversion} disabled={!sourceUrl.trim() || isBusy}>{isBusy ? <LoaderCircle size={17} className="spin" /> : <ArrowRight size={17} />}{isBusy ? 'Converting…' : 'Start conversion'}</button>}{(phase === 'error' || phase === 'success') && <button type="button" className="secondary-button" onClick={reset}><RefreshCw size={15} /> Start over</button>}</div>
             <div className="panel-footer"><span><GitBranch size={14} /> Powered by GitHub Actions</span><span>Node · Puppeteer · Blockbench</span></div>
           </div>
         </section>

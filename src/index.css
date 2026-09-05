@@ -62,6 +62,11 @@ button:disabled { cursor: not-allowed; }
 .drop-zone strong { color: #e4e4e7; font-size: 14px; font-weight: 600; }
 .drop-zone > span:not(.upload-icon) { margin-top: 7px; color: #71717a; font-size: 11px; }
 .drop-zone small { margin-top: 18px; color: #52525b; font: 10px 'JetBrains Mono', monospace; }
+.url-input-card { min-height: 220px; display: flex; flex-direction: column; justify-content: center; border: 1px dashed #52525b; border-radius: 8px; padding: 28px; background: rgba(9,9,11,.35); }
+.url-input-card label { color: #e4e4e7; font-size: 13px; font-weight: 600; }
+.url-input-card input { width: 100%; margin-top: 12px; border: 1px solid #52525b; border-radius: 7px; padding: 13px 14px; color: #f4f4f5; background: #18181b; font-size: 13px; }
+.url-input-card input:focus { border-color: #fff; outline: 2px solid rgba(255,255,255,.18); outline-offset: 2px; }
+.url-input-card span { margin-top: 12px; color: #71717a; font: 10px/1.5 'JetBrains Mono', monospace; }
 .file-card { min-height: 104px; display: flex; align-items: center; gap: 14px; border: 1px solid #71717a; border-radius: 8px; padding: 18px; background: #18181b; }
 .file-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; border-radius: 8px; color: #fff; background: #3f3f46; }
 .file-info { min-width: 0; flex: 1; }
@@ -118,6 +123,10 @@ html.light .step.active { background: #f4f4f5; }
 html.light .step.active, html.light .step.active span { color: #111; }
 html.light .step strong, html.light .file-info strong { color: #27272a; }
 html.light .drop-zone, html.light .status-card { border-color: #d4d4d8; background: rgba(255,255,255,.6); }
+html.light .url-input-card { border-color: #d4d4d8; background: rgba(255,255,255,.6); }
+html.light .url-input-card label { color: #27272a; }
+html.light .url-input-card input { border-color: #d4d4d8; color: #18181b; background: #fff; }
+html.light .url-input-card span { color: #52525b; }
 html.light .drop-zone:hover, html.light .drop-zone.dragging { background: #f4f4f5; }
 html.light .drop-zone > span:not(.upload-icon), html.light .drop-zone small, html.light .status-card strong, html.light .file-info span { color: #52525b; }
 html.light .file-card { border-color: #a1a1aa; background: #f4f4f5; }

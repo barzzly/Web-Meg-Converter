@@ -1,11 +1,10 @@
 const { randomUUID } = require('crypto');
 const { githubConfig, githubRequest, json } = require('./_github');
 
-function isAllowedBlobUrl(value) {
+function isAllowedSourceUrl(value) {
   try {
     const url = new URL(value);
-    const configuredHost = process.env.BLOB_HOSTNAME;
-    return url.protocol === 'https:' && Boolean(configuredHost) && url.hostname === configuredHost;
+    return url.protocol === 'https:' && Boolean(url.hostname);
   } catch {
     return false;
   }
@@ -16,7 +15,7 @@ module.exports = async function convert(req, res) {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    if (!isAllowedBlobUrl(body.url)) return res.status(400).json({ error: 'Invalid temporary upload URL.' });
+    if (!isAllowedSourceUrl(body.url)) return res.status(400).json({ error: 'Invalid HTTPS ZIP download URL.' });
 
     const config = githubConfig();
     const requestId = randomUUID();

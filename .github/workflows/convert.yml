@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       zip_url:
-        description: 'Temporary HTTPS download link for ZIP containing .bbmodel files'
+        description: 'HTTPS direct-download link for ZIP containing .bbmodel files'
         required: true
         type: string
       request_id:
