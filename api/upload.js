@@ -36,6 +36,7 @@ module.exports = async function upload(req, res) {
         if (!Number.isSafeInteger(payloadSize) || payloadSize <= 0 || payloadSize > MAX_FILE_SIZE) throw new Error('File must be between 1 byte and 250 MB.');
         if (!safeName.toLowerCase().endsWith('.zip')) throw new Error('Only .zip files are accepted.');
         return {
+          access: 'public',
           allowedContentTypes: ['application/zip'],
           maximumSizeInBytes: MAX_FILE_SIZE,
           validUntil: Date.now() + 15 * 60 * 1000,
