@@ -1,13 +1,15 @@
 name: MEG to Bedrock Converter
+run-name: MEG conversion ${{ inputs.request_id || 'manual' }}
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       zip_url:
-        description: 'Direct download link for the ZIP containing .bbmodel files (e.g. Dropbox direct link)'
+        description: 'Temporary HTTPS download link for ZIP containing .bbmodel files'
+        required: true
+        type: string
+      request_id:
+        description: 'Conversion request identifier'
         required: true
         type: string
 
@@ -19,7 +21,12 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Download ZIP File
-        run: wget -O input.zip "${{ github.event.inputs.zip_url }}" || { echo "Download failed. Check the URL."; exit 1; }
+        run: wget --https-only --timeout=60 --tries=3 -O input.zip "${{ inputs.zip_url }}" || { echo "Download failed. Check the temporary URL."; exit 1; }
+
+      - name: Validate request input
+        run: |
+          test -n "${{ inputs.request_id }}"
+          file input.zip || true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -42,3 +49,5 @@ jobs:
         with:
           name: Bedrock-GeyserMC-Output
           path: meg-bedrock.zip
+          retention-days: 1
+          if-no-files-found: error

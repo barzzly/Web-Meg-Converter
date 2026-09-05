@@ -3,3 +3,10 @@ bukti_robot.png
 test-robot.js
 workspace/
 Final_GeyserMC_Input.zip
+.env
+.env.*
+!.env.example
+.vercel
+.dist
+node_modules/.cache
+dist/

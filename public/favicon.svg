@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Dark background squircle -->
+  <rect width="100" height="100" rx="26" fill="#09090b" stroke="#1f1f23" stroke-width="2" />
+  
+  <!-- Minimalist Low Poly Grizzly Bear Head -->
+  <g fill="none" stroke-linejoin="round" stroke-width="0.3">
+    <!-- Left Ear -->
+    <polygon points="26,34 36,18 43,29" fill="#312e81" stroke="#312e81" />
+    <polygon points="29,32 35,21 40,29" fill="#4f46e5" stroke="#4f46e5" />
+    
+    <!-- Right Ear -->
+    <polygon points="74,34 64,18 57,29" fill="#312e81" stroke="#312e81" />
+    <polygon points="71,32 65,21 60,29" fill="#4f46e5" stroke="#4f46e5" />
+    
+    <!-- Forehead / Temples -->
+    <polygon points="34,44 50,26 43,29" fill="#4338ca" stroke="#4338ca" />
+    <polygon points="66,44 50,26 57,29" fill="#4338ca" stroke="#4338ca" />
+    <polygon points="50,26 43,29 50,44" fill="#3730a3" stroke="#3730a3" />
+    <polygon points="50,26 57,29 50,44" fill="#312e81" stroke="#312e81" />
+    
+    <!-- Cheeks -->
+    <polygon points="26,54 34,44 33,67" fill="#4f46e5" stroke="#4f46e5" />
+    <polygon points="74,54 66,44 67,67" fill="#4f46e5" stroke="#4f46e5" />
+    
+    <!-- Face Center -->
+    <polygon points="34,44 50,44 33,67" fill="#6366f1" stroke="#6366f1" />
+    <polygon points="66,44 50,44 67,67" fill="#4338ca" stroke="#4338ca" />
+    
+    <!-- Snout / Nose bridge -->
+    <polygon points="50,44 33,67 50,77" fill="#818cf8" stroke="#818cf8" />
+    <polygon points="50,44 67,67 50,77" fill="#4f46e5" stroke="#4f46e5" />
+    
+    <!-- Nose Tip -->
+    <polygon points="50,67 44,71 56,71" fill="#1e1b4b" stroke="#1e1b4b" />
+    <polygon points="44,71 56,71 50,77" fill="#09090b" stroke="#09090b" />
+  </g>
+</svg>

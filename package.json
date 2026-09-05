@@ -1,17 +1,29 @@
 {
   "name": "meg-converter",
   "version": "1.0.0",
-  "description": "",
+  "description": "BarzzLy MEG to Bedrock converter",
   "main": "geyser_model_engine_packer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"No automated tests configured\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@vercel/blob": "^2.8.0",
     "adm-zip": "^0.6.0",
-    "puppeteer": "^25.3.0"
+    "lucide-react": "^1.41.0",
+    "puppeteer": "^25.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.2.2"
   }
 }
