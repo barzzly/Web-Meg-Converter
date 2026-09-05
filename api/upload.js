@@ -26,7 +26,6 @@ module.exports = async function upload(req, res) {
       token: process.env.BLOB_READ_WRITE_TOKEN,
       request: req,
       body: rawBody,
-      access: 'public',
       onBeforeGenerateToken: async (pathname, payload, multipart) => {
         const safeName = pathname.split('/').pop() || '';
         const parsedPayload = getPayload({ clientPayload: payload });

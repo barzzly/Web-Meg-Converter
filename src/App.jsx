@@ -153,6 +153,7 @@ function App() {
       setPhase('uploading');
       setStatusText('Uploading package securely…');
       const blob = await upload(file.name, file, {
+        access: 'public',
         clientPayload: JSON.stringify({ filename: file.name, size: file.size }),
         handleUploadUrl: '/api/upload',
         multipart: false,
