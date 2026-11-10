@@ -132,7 +132,7 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <div className="brand-block">
-          <img src="/images/barzzly-logo-dark.png" alt="BarzzLy logo" className="brand-mark" />
+          <img src={theme === 'dark' ? '/images/barzzly-putih-transparan.png' : '/images/barzzly-hitam-transparan.png'} alt="BarzzLy logo" className="brand-mark" />
           <span className="brand-name">BarzzLy</span>
           <span className="topbar-divider" />
           <span className="product-label">MEG Converter</span>

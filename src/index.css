@@ -14,7 +14,7 @@ button:disabled { cursor: not-allowed; }
 .topbar { position: relative; z-index: 2; min-height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 10px clamp(16px, 4vw, 56px); border-bottom: 1px solid rgba(63,63,70,.7); background: rgba(9,9,11,.76); backdrop-filter: blur(18px); }
 .brand-block, .topbar-actions, .brand-block, .status-pill, .icon-button, .eyebrow, .panel-footer span, .footer-dot { display: flex; align-items: center; }
 .brand-block { gap: 10px; min-width: 0; }
-.brand-mark { width: 30px; height: 30px; object-fit: contain; filter: invert(1); }
+.brand-mark { width: 30px; height: 30px; object-fit: contain; }
 .brand-name { color: #f4f4f5; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .topbar-divider { height: 18px; width: 1px; margin: 0 4px; background: #3f3f46; }
 .product-label { overflow: hidden; color: #a1a1aa; font: 500 12px 'JetBrains Mono', monospace; text-overflow: ellipsis; white-space: nowrap; }
@@ -111,7 +111,6 @@ html.light .app-shell::before, html.light .app-shell::after { display: none; }
 html.light .topbar { border-color: rgba(212,212,216,.9); background: rgba(255,255,255,.72); }
 html.light .brand-name, html.light .intro h1, html.light .panel-heading h2, html.light .drop-zone strong, html.light .file-info strong { color: #18181b; }
 html.light .intro h1 span { color: #111; }
-html.light .brand-mark { filter: none; }
 html.light .product-label, html.light .intro p { color: #52525b; }
 html.light .topbar-divider, html.light .step-icon, html.light .panel-footer, html.light .privacy-note { border-color: #d4d4d8; }
 html.light .status-pill, html.light .icon-button, html.light .secondary-button { border-color: #d4d4d8; background: rgba(255,255,255,.72); }
